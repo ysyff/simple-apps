@@ -4,11 +4,11 @@ services:
   backend:
     build: ./apps
     restart: always
-    environtment:
-      -DB_NAME=training
-      -DB_HOST=localhost
-      -DB_USER=peserta
-      -DB_PASSWORD=password
+    environment:       # ← ini harus environment
+      - DB_NAME=training
+      - DB_HOST=localhost
+      - DB_USER=peserta
+      - DB_PASSWORD=password
     links:
       - db
     ports:
@@ -44,9 +44,9 @@ services:
     build: ./nginx
     restart: always
     ports:
-    - "80:80"
+      - "80:80"
     depends_on:
-    - backend
+      - backend
 
 volumes:
   app-data:
