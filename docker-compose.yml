@@ -1,55 +1,47 @@
 version: "3.9"
-
 services:
 
   backend:
     build: ./apps
     restart: always
-    environment:
-      DB_NAME: training
-      DB_HOST: db
-      DB_USER: peserta
-      DB_PASSWORD: password
-    depends_on:
+    links:
       - db
     ports:
-      - "3000:3000"
+      - "3000"
     volumes:
       - app-data:/app/public/images
 
   db:
-    image: mariadb:latest
+    image: "mariadb"
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: training
-      MYSQL_USER: peserta
-      MYSQL_PASSWORD: password
+    links:
+      - phpmyadmin
     ports:
-      - "3307:3306"
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=training
+      - MYSQL_USER=peserta
+      - MYSQL_PASSWORD=password
     volumes:
       - ./apps/database/:/docker-entrypoint-initdb.d
       - db-data:/var/lib/mysql
 
   phpmyadmin:
-    image: phpmyadmin
+    image: "phpmyadmin"
     restart: always
     ports:
-      - "9915:80"
+      - "8000:80"
     environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: password
-    depends_on:
-      - db
+      - PMA_HOST=db
 
   web:
     build: ./nginx
     restart: always
     ports:
-      - "80:80"
+    - "80:80"
     depends_on:
-      - backend
+    - backend
 
 volumes:
   app-data:
