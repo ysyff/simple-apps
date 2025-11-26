@@ -1,44 +1,47 @@
 version: "3.9"
+
 services:
 
   backend:
     build: ./apps
     restart: always
-    environment:       # ← ini harus environment
-      - DB_NAME=training
-      - DB_HOST=localhost
-      - DB_USER=peserta
-      - DB_PASSWORD=password
-    links:
+    environment:
+      DB_NAME: training
+      DB_HOST: db
+      DB_USER: peserta
+      DB_PASSWORD: password
+    depends_on:
       - db
     ports:
-      - "3000"
+      - "3000:3000"
     volumes:
       - app-data:/app/public/images
 
   db:
-    image: "mariadb"
+    image: mariadb:latest
     restart: always
-    links:
-      - phpmyadmin
-    ports:
-      - "3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=training
-      - MYSQL_USER=peserta
-      - MYSQL_PASSWORD=password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: training
+      MYSQL_USER: peserta
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
     volumes:
       - ./apps/database/:/docker-entrypoint-initdb.d
       - db-data:/var/lib/mysql
 
   phpmyadmin:
-    image: "phpmyadmin"
+    image: phpmyadmin
     restart: always
     ports:
       - "9915:80"
     environment:
-      - PMA_HOST=db
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: password
+    depends_on:
+      - db
 
   web:
     build: ./nginx
