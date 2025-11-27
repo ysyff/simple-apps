@@ -1,7 +1,6 @@
 pipeline {
-    agent any
+    agent {label 'production'}
     
-    tools {nodejs "nodejs 18.16.0"}
 
     stages {
         stage('Checkout SCM') {
