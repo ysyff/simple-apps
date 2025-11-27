@@ -4,12 +4,15 @@ services:
   backend:
     build: ./apps
     restart: always
-    links:
+    depends_on:
       - db
+    environment:
+      DB_HOST: db
+      DB_USER: peserta
+      DB_PASS: password
+      DB_NAME: training
     ports:
-      - "3000"
-    volumes:
-      - app-data:/app/public/images
+      - "3000:3000"
 
   db:
     image: "mariadb"
