@@ -4,15 +4,12 @@ services:
   backend:
     build: ./apps
     restart: always
-    depends_on:
+    links:
       - db
-    environment:
-      DB_HOST: db
-      DB_USER: peserta
-      DB_PASS: password
-      DB_NAME: training
     ports:
-      - "3000:3000"
+      - "3000"
+    volumes:
+      - app-data:/app/public/images
 
   db:
     image: "mariadb"
@@ -34,7 +31,7 @@ services:
     image: "phpmyadmin"
     restart: always
     ports:
-      - "8008:80"
+      - "8021:80"
     environment:
       - PMA_HOST=db
 
