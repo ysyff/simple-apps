@@ -23,8 +23,9 @@ pipeline {
         }
         stage('Code Review') {
             steps {
-                sh '''sonar   -Dsonar.host.url=http://172.23.12.114:9000   
-                    -Dsonar.token=sqp_ceda6e4441c41ba1badedad953d837922c6c5792   
+                sh '''sonar \\
+                    -Dsonar.host.url=http://172.23.12.114:9000 \\
+                    -Dsonar.token=sqp_79abf6b01854e03520da94cb17adbeaad16cfa89 \\
                     -Dsonar.projectKey=simple-apps'''
             }
         }
